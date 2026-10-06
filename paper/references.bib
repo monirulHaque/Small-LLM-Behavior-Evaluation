@@ -1,0 +1,656 @@
+% =====================================================================
+% references.bib
+% Entries marked "VERIFY" have uncertain metadata (usually the author
+% list). Check them on arXiv before submission.
+% =====================================================================
+
+% ---------------- Quantization x trust / bias / safety ----------------
+@inproceedings{hong2024decoding,
+  title     = {Decoding Compressed Trust: Scrutinizing the Trustworthiness of Efficient {LLMs} Under Compression},
+  author    = {Hong, Junyuan and Duan, Jinhao and Zhang, Chenhui and Li, Zhangheng and Xie, Chulin and Lieberman, Kelsey and Diffenderfer, James and Bartoldson, Brian and Jaiswal, Ajay and Xu, Kaidi and Kailkhura, Bhavya and Hendrycks, Dan and Song, Dawn and Wang, Zhangyang and Li, Bo},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning (ICML)},
+  year      = {2024},
+  note      = {arXiv:2403.15447}
+}
+
+@article{kharinaev2025investigating,
+  title   = {Investigating the Impact of Quantization Methods on the Safety and Reliability of Large Language Models},
+  author  = {Kharinaev, Artyom and Moskvoretskii, Viktor and Shvetsov, Egor and Studenikina, Kseniia and Mikhail, Bykov and Burnaev, Evgeny},
+  journal = {arXiv preprint arXiv:2502.15799},
+  year    = {2025}
+}
+
+@inproceedings{marcuzzi2026quantization,
+  title     = {How Quantization Shapes Bias in Large Language Models},
+  author    = {Marcuzzi, Federico and Ning, Xuefei and Schwartz, Roy and Gurevych, Iryna},
+  booktitle = {Proceedings of the 19th Conference of the European Chapter of the Association for Computational Linguistics (EACL)},
+  pages     = {363--404},
+  year      = {2026},
+  note      = {arXiv:2508.18088}
+}
+
+@inproceedings{hua2026uncertainty,
+  title     = {Uncertainty Drives Social Bias Changes in Quantized Large Language Models},
+  author    = {Hua, Stanley Z. and Lotfi, Sanae and Chen, Irene Y.},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+  note      = {arXiv:2602.06181}
+}
+
+@article{rath2026quantization,
+  title   = {Quantization Undoes Alignment: Bias Emergence in Compressed {LLMs} Across Models and Precision Levels},
+  author  = {Rath, Plawan Kumar and Maliakkal, Rahul},
+  journal = {arXiv preprint arXiv:2605.15208},
+  year    = {2026}
+}
+
+@article{ferrara2026quantibias,
+  title   = {{QuantiBias}: Benchmarking Quantization-Induced Bias in {LLMs}},
+  author  = {Ferrara, Emilio},
+  journal = {arXiv preprint arXiv:2607.21063},
+  year    = {2026}
+}
+
+@inproceedings{alhakim2026preserving,
+  title     = {Preserving Fairness and Safety in Quantized {LLMs} Through Critical Weight Protection},
+  author    = {Al Hakim, Muhammad Alif and Wicaksono, Alfan Farizki and Koto, Fajri},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2026},
+  year      = {2026},
+  note      = {arXiv:2601.12033}
+}
+
+@inproceedings{fu2025quantized,
+  title     = {Quantized but Deceptive? {A} Multi-Dimensional Truthfulness Evaluation of Quantized {LLMs}},
+  author    = {Fu, Yao and Long, Xianxuan and Li, Runchao and Yu, Haotian and Sheng, Mu and Han, Xiaotian and Yin, Yu and Li, Pan},
+  booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2025},
+  note      = {arXiv:2508.19432}
+}
+
+@inproceedings{jin2024comprehensive,
+  title     = {A Comprehensive Evaluation of Quantization Strategies for Large Language Models},
+  author    = {Jin, Renren and Du, Jiangcun and Huang, Wuwei and Liu, Wei and Luan, Jian and Wang, Bin and Xiong, Deyi},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2024},
+  year      = {2024},
+  note      = {arXiv:2402.16775}
+}
+
+@inproceedings{proskurina2024quantization,
+  title     = {When Quantization Affects Confidence of Large Language Models?},
+  author    = {Proskurina, Irina and Brun, Luc and Metzler, Guillaume and Velcin, Julien},
+  booktitle = {Findings of the Association for Computational Linguistics: NAACL 2024},
+  year      = {2024},
+  note      = {arXiv:2405.00632}
+}
+
+@article{ayadi2026reliability,
+  title   = {Reliability Scaling Laws for Quantized Large Language Models},
+  author  = {Ayadi, Sirine and Dar{\'o}czi, S{\'a}ndor and G{\"u}nnemann, Stephan and Charpentier, Bertrand},
+  journal = {Transactions on Machine Learning Research},
+  year    = {2026},
+  note    = {arXiv:2607.10855}
+}
+
+@inproceedings{xu2024beyond,
+  title     = {Beyond Perplexity: Multi-dimensional Safety Evaluation of {LLM} Compression},
+  author    = {Xu, Zhichao and Gupta, Ashim and Li, Tao and Bentham, Oliver and Srikumar, Vivek},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2024},
+  year      = {2024}
+}
+
+@inproceedings{egashira2025mindgap,
+  title     = {Mind the Gap: A Practical Attack on {GGUF} Quantization},
+  author    = {Egashira, Kazuki and Staab, Robin and Vero, Mark and He, Jingxuan and Vechev, Martin},
+  booktitle = {Proceedings of the 42nd International Conference on Machine Learning (ICML)},
+  year      = {2025},
+  note      = {arXiv:2505.23786}
+}
+
+% ---------------- Quantization methods ----------------
+@inproceedings{dettmers2022llmint8,
+  title     = {{LLM.int8()}: 8-bit Matrix Multiplication for Transformers at Scale},
+  author    = {Dettmers, Tim and Lewis, Mike and Belkada, Younes and Zettlemoyer, Luke},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2022}
+}
+
+@inproceedings{dettmers2023case,
+  title     = {The Case for 4-bit Precision: k-bit Inference Scaling Laws},
+  author    = {Dettmers, Tim and Zettlemoyer, Luke},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning (ICML)},
+  year      = {2023}
+}
+
+@inproceedings{frantar2023gptq,
+  title     = {{GPTQ}: Accurate Post-Training Quantization for Generative Pre-trained Transformers},
+  author    = {Frantar, Elias and Ashkboos, Saleh and Hoefler, Torsten and Alistarh, Dan},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2023}
+}
+
+@inproceedings{lin2024awq,
+  title     = {{AWQ}: Activation-aware Weight Quantization for On-Device {LLM} Compression and Acceleration},
+  author    = {Lin, Ji and Tang, Jiaming and Tang, Haotian and Yang, Shang and Chen, Wei-Ming and Wang, Wei-Chen and Xiao, Guangxuan and Dang, Xingyu and Gan, Chuang and Han, Song},
+  booktitle = {Proceedings of Machine Learning and Systems (MLSys)},
+  year      = {2024}
+}
+
+@misc{gerganov2023llamacpp,
+  title        = {llama.cpp: {LLM} inference in {C/C++}},
+  author       = {Gerganov, Georgi and {llama.cpp contributors}},
+  year         = {2023},
+  howpublished = {\url{https://github.com/ggml-org/llama.cpp}}
+}
+
+% ---------------- Sycophancy ----------------
+@inproceedings{perez2023discovering,
+  title     = {Discovering Language Model Behaviors with Model-Written Evaluations},
+  author    = {Perez, Ethan and Ringer, Sam and Luko{\v{s}}i{\=u}t{\.e}, Kamil{\.e} and Nguyen, Karina and others},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2023},
+  year      = {2023}
+}
+
+@inproceedings{sharma2024sycophancy,
+  title     = {Towards Understanding Sycophancy in Language Models},
+  author    = {Sharma, Mrinank and Tong, Meg and Korbak, Tomasz and Duvenaud, David and Askell, Amanda and Bowman, Samuel R. and others},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  note      = {arXiv:2310.13548}
+}
+
+@article{wei2023simple,
+  title   = {Simple Synthetic Data Reduces Sycophancy in Large Language Models},
+  author  = {Wei, Jerry and Huang, Da and Lu, Yifeng and Zhou, Denny and Le, Quoc V.},
+  journal = {arXiv preprint arXiv:2308.03958},
+  year    = {2023}
+}
+
+@article{fanous2025syceval,
+  title   = {{SycEval}: Evaluating {LLM} Sycophancy},
+  author  = {Fanous, Aaron and others},
+  journal = {arXiv preprint arXiv:2502.08177},
+  year    = {2025}
+}
+
+@inproceedings{hong2025sycon,
+  title     = {Measuring Sycophancy of Language Models in Multi-turn Dialogues},
+  author    = {Hong, Jiseung and Byun, Grace and Kim, Seungone and Shu, Kai},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2025},
+  year      = {2025},
+  note      = {arXiv:2505.23840}
+}
+
+@inproceedings{cheng2025elephant,
+  title     = {{ELEPHANT}: Measuring and Understanding Social Sycophancy in {LLMs}},
+  author    = {Cheng, Myra and Yu, Sunny and Lee, Cinoo and Khadpe, Pranav and Ibrahim, Lujain and Jurafsky, Dan},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+  note      = {arXiv:2505.13995}
+}
+
+% VERIFY: author list
+@article{syps2026,
+  title   = {{SyPS}: Measuring Sycophancy Prompt Sensitivity in Large Language Models},
+  author  = {{[Author list to verify]}},
+  journal = {arXiv preprint arXiv:2608.23837},
+  year    = {2026}
+}
+
+@article{ye2026sycophancy,
+  title   = {What Counts as {AI} Sycophancy? {A} Taxonomy and Expert Survey of a Fragmented Construct},
+  author  = {Ye, Meryl and Ibrahim, Lujain and Bo, Jessica Y. and Cheng, Myra and Mattsson, Ida and Vennemeyer, Daniel and Kraut, Robert and Rathje, Steve},
+  journal = {arXiv preprint arXiv:2605.21778},
+  year    = {2026}
+}
+
+% ---------------- Dark patterns / anthropomorphism ----------------
+@inproceedings{kran2025darkbench,
+  title     = {{DarkBench}: Benchmarking Dark Patterns in Large Language Models},
+  author    = {Kran, Esben and Nguyen, Hieu Minh and Kundu, Akash and Jawhar, Sami and Park, Jinsuk and Jurewicz, Mateusz Maria},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2025},
+  note      = {arXiv:2503.10728}
+}
+
+@inproceedings{ibrahim2025multiturn,
+  title     = {Multi-turn Evaluation of Anthropomorphic Behaviours in Large Language Models},
+  author    = {Ibrahim, Lujain and Akbulut, Canfer and Elasmar, Rasmi and Rastogi, Charvi and Kahng, Minsuk and Morris, Meredith Ringel and McKee, Kevin R. and Rieser, Verena and Shanahan, Murray and Weidinger, Laura},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+  note      = {arXiv:2502.07077}
+}
+
+@article{cheng2025humt,
+  title   = {{HumT DumT}: Measuring and Controlling Human-like Language in {LLMs}},
+  author  = {Cheng, Myra and Yu, Sunny and Jurafsky, Dan},
+  journal = {arXiv preprint arXiv:2502.13259},
+  year    = {2025}
+}
+
+% ---------------- Refusal ----------------
+@inproceedings{rottger2024xstest,
+  title     = {{XSTest}: A Test Suite for Identifying Exaggerated Safety Behaviours in Large Language Models},
+  author    = {R{\"o}ttger, Paul and Kirk, Hannah Rose and Vidgen, Bertie and Attanasio, Giuseppe and Bianchi, Federico and Hovy, Dirk},
+  booktitle = {Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics (NAACL)},
+  year      = {2024}
+}
+
+@inproceedings{cui2025orbench,
+  title     = {{OR-Bench}: An Over-Refusal Benchmark for Large Language Models},
+  author    = {Cui, Justin and Chiang, Wei-Lin and Stoica, Ion and Hsieh, Cho-Jui},
+  booktitle = {Proceedings of the 42nd International Conference on Machine Learning (ICML)},
+  year      = {2025},
+  note      = {arXiv:2405.20947}
+}
+
+@article{falsereject2025,
+  title   = {{FalseReject}: A Resource for Improving Contextual Safety and Mitigating Over-Refusals in {LLMs} via Structured Reasoning},
+  author  = {Zhang, Zhehao and Xu, Weijie and Wu, Fanyou and Reddy, Chandan K.},
+  journal = {arXiv preprint arXiv:2505.08054},
+  year    = {2025}
+}
+
+% VERIFY: author list
+@article{refusalcompliance2026,
+  title   = {The Refusal--Compliance Tradeoff: A Large-Scale Safety Behavior Audit of Large Language Models},
+  author  = {{[Author list to verify]}},
+  journal = {arXiv preprint arXiv:2605.05427},
+  year    = {2026}
+}
+
+% ---------------- Uncertainty / clarification / multi-turn ----------------
+@article{lin2022teaching,
+  title   = {Teaching Models to Express Their Uncertainty in Words},
+  author  = {Lin, Stephanie and Hilton, Jacob and Evans, Owain},
+  journal = {Transactions on Machine Learning Research},
+  year    = {2022}
+}
+
+@article{kadavath2022language,
+  title   = {Language Models (Mostly) Know What They Know},
+  author  = {Kadavath, Saurav and Conerly, Tom and Askell, Amanda and Henighan, Tom and others},
+  journal = {arXiv preprint arXiv:2207.05221},
+  year    = {2022}
+}
+
+@inproceedings{xiong2024can,
+  title     = {Can {LLMs} Express Their Uncertainty? {An} Empirical Evaluation of Confidence Elicitation in {LLMs}},
+  author    = {Xiong, Miao and Hu, Zhiyuan and Lu, Xinyang and Li, Yifei and Fu, Jie and He, Junxian and Hooi, Bryan},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@inproceedings{yona2024faithfully,
+  title     = {Can Large Language Models Faithfully Express Their Intrinsic Uncertainty in Words?},
+  author    = {Yona, Gal and Aharoni, Roee and Geva, Mor},
+  booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2024}
+}
+
+@inproceedings{liu2025metafaith,
+  title     = {{MetaFaith}: Faithful Natural Language Uncertainty Expression in {LLMs}},
+  author    = {Liu, Gabrielle Kaili-May and Yona, Gal and Caciularu, Avi and Szpektor, Idan and Rudner, Tim G. J. and Cohan, Arman},
+  booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2025},
+  note      = {arXiv:2505.24858}
+}
+
+@inproceedings{guo2017calibration,
+  title     = {On Calibration of Modern Neural Networks},
+  author    = {Guo, Chuan and Pleiss, Geoff and Sun, Yu and Weinberger, Kilian Q.},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning (ICML)},
+  year      = {2017}
+}
+
+@inproceedings{min2020ambigqa,
+  title     = {{AmbigQA}: Answering Ambiguous Open-domain Questions},
+  author    = {Min, Sewon and Michael, Julian and Hajishirzi, Hannaneh and Zettlemoyer, Luke},
+  booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2020}
+}
+
+@inproceedings{zhang2024clamber,
+  title     = {{CLAMBER}: A Benchmark of Identifying and Clarifying Ambiguous Information Needs in Large Language Models},
+  author    = {Zhang, Tong and Qin, Peixin and Deng, Yang and Huang, Chen and Lei, Wenqiang and Liu, Junhong and Jin, Dingnan and Liang, Hongru and Chua, Tat-Seng},
+  booktitle = {Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2024},
+  note      = {arXiv:2405.12063}
+}
+
+@inproceedings{laban2025lost,
+  title     = {{LLMs} Get Lost In Multi-Turn Conversation},
+  author    = {Laban, Philippe and Hayashi, Hiroaki and Zhou, Yingbo and Neville, Jennifer},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+  note      = {arXiv:2505.06120}
+}
+
+% ---------------- Bias ----------------
+@inproceedings{parrish2022bbq,
+  title     = {{BBQ}: A Hand-Built Bias Benchmark for Question Answering},
+  author    = {Parrish, Alicia and Chen, Angelica and Nangia, Nikita and Padmakumar, Vishakh and Phang, Jason and Thompson, Jana and Htut, Phu Mon and Bowman, Samuel R.},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2022},
+  year      = {2022}
+}
+
+@article{bai2025implicit,
+  title   = {Explicitly Unbiased Large Language Models Still Form Biased Associations},
+  author  = {Bai, Xuechunzi and Wang, Angelina and Sucholutsky, Ilia and Griffiths, Thomas L.},
+  journal = {Proceedings of the National Academy of Sciences},
+  year    = {2025}
+}
+
+@article{hofmann2024dialect,
+  title   = {{AI} Generates Covertly Racist Decisions About People Based on Their Dialect},
+  author  = {Hofmann, Valentin and Kalluri, Pratyusha Ria and Jurafsky, Dan and King, Sharese},
+  journal = {Nature},
+  volume  = {633},
+  pages   = {147--154},
+  year    = {2024}
+}
+
+@article{greenwald1998iat,
+  title   = {Measuring Individual Differences in Implicit Cognition: The Implicit Association Test},
+  author  = {Greenwald, Anthony G. and McGhee, Debbie E. and Schwartz, Jordan L. K.},
+  journal = {Journal of Personality and Social Psychology},
+  volume  = {74},
+  number  = {6},
+  pages   = {1464--1480},
+  year    = {1998}
+}
+
+@article{rozado2025hiring,
+  title   = {Gender and Positional Biases in {LLM}-Based Hiring Decisions},
+  author  = {Rozado, David},
+  journal = {arXiv preprint arXiv:2505.17049},
+  year    = {2025}
+}
+
+% ---------------- Cognitive biases ----------------
+@article{malberg2024cognitive,
+  title   = {A Comprehensive Evaluation of Cognitive Biases in {LLMs}},
+  author  = {Malberg, Simon and Poletukhin, Roman and Schuster, Carolin M. and Groh, Georg},
+  journal = {arXiv preprint arXiv:2410.15413},
+  year    = {2024}
+}
+
+@article{tversky1974judgment,
+  title   = {Judgment under Uncertainty: Heuristics and Biases},
+  author  = {Tversky, Amos and Kahneman, Daniel},
+  journal = {Science},
+  volume  = {185},
+  number  = {4157},
+  pages   = {1124--1131},
+  year    = {1974}
+}
+
+@article{tversky1981framing,
+  title   = {The Framing of Decisions and the Psychology of Choice},
+  author  = {Tversky, Amos and Kahneman, Daniel},
+  journal = {Science},
+  volume  = {211},
+  number  = {4481},
+  pages   = {453--458},
+  year    = {1981}
+}
+
+@inproceedings{zheng2024large,
+  title     = {Large Language Models Are Not Robust Multiple Choice Selectors},
+  author    = {Zheng, Chujie and Zhou, Hao and Meng, Fandong and Zhou, Jie and Huang, Minlie},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@inproceedings{sclar2024quantifying,
+  title     = {Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or: How {I} Learned to Start Worrying about Prompt Formatting},
+  author    = {Sclar, Melanie and Choi, Yejin and Tsvetkov, Yulia and Suhr, Alane},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+% ---------------- Evaluation methodology ----------------
+@inproceedings{zheng2023judging,
+  title     = {Judging {LLM}-as-a-Judge with {MT-Bench} and Chatbot Arena},
+  author    = {Zheng, Lianmin and Chiang, Wei-Lin and Sheng, Ying and Zhuang, Siyuan and Wu, Zhanghao and Zhuang, Yonghao and Lin, Zi and Li, Zhuohan and Li, Dacheng and Xing, Eric P. and Zhang, Hao and Gonzalez, Joseph E. and Stoica, Ion},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track},
+  year      = {2023}
+}
+
+@article{wataoka2024selfpreference,
+  title   = {Self-Preference Bias in {LLM}-as-a-Judge},
+  author  = {Wataoka, Koki and Takahashi, Tsubasa and Ri, Ryokan},
+  journal = {arXiv preprint arXiv:2410.21819},
+  year    = {2024}
+}
+
+@inproceedings{ye2024justice,
+  title     = {Justice or Prejudice? {Q}uantifying Biases in {LLM}-as-a-Judge},
+  author    = {Ye, Jiayi and Wang, Yanbo and Huang, Yue and Chen, Dongping and Zhang, Qihui and Moniz, Nuno and Gao, Tian and Geyer, Werner and Huang, Chao and Chen, Pin-Yu and Chawla, Nitesh V. and Zhang, Xiangliang},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2025},
+  note      = {arXiv:2410.02736}
+}
+
+@article{liang2023helm,
+  title   = {Holistic Evaluation of Language Models},
+  author  = {Liang, Percy and Bommasani, Rishi and Lee, Tony and Tsipras, Dimitris and others},
+  journal = {Transactions on Machine Learning Research},
+  year    = {2023}
+}
+
+@inproceedings{wang2023decodingtrust,
+  title     = {{DecodingTrust}: A Comprehensive Assessment of Trustworthiness in {GPT} Models},
+  author    = {Wang, Boxin and Chen, Weixin and Pei, Hengzhi and Xie, Chulin and others},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track},
+  year      = {2023}
+}
+
+@inproceedings{hendrycks2021mmlu,
+  title     = {Measuring Massive Multitask Language Understanding},
+  author    = {Hendrycks, Dan and Burns, Collin and Basart, Steven and Zou, Andy and Mazeika, Mantas and Song, Dawn and Steinhardt, Jacob},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2021}
+}
+
+@article{zhou2023ifeval,
+  title   = {Instruction-Following Evaluation for Large Language Models},
+  author  = {Zhou, Jeffrey and Lu, Tianjian and Mishra, Swaroop and Brahma, Siddhartha and Basu, Sujoy and Luan, Yi and Zhou, Denny and Hou, Le},
+  journal = {arXiv preprint arXiv:2311.07911},
+  year    = {2023}
+}
+
+@inproceedings{joshi2017triviaqa,
+  title     = {{TriviaQA}: A Large Scale Distantly Supervised Challenge Dataset for Reading Comprehension},
+  author    = {Joshi, Mandar and Choi, Eunsol and Weld, Daniel and Zettlemoyer, Luke},
+  booktitle = {Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2017}
+}
+
+% ---------------- Statistics ----------------
+@article{cohen1960coefficient,
+  title   = {A Coefficient of Agreement for Nominal Scales},
+  author  = {Cohen, Jacob},
+  journal = {Educational and Psychological Measurement},
+  volume  = {20},
+  number  = {1},
+  pages   = {37--46},
+  year    = {1960}
+}
+
+@article{mcnemar1947note,
+  title   = {Note on the Sampling Error of the Difference Between Correlated Proportions or Percentages},
+  author  = {McNemar, Quinn},
+  journal = {Psychometrika},
+  volume  = {12},
+  number  = {2},
+  pages   = {153--157},
+  year    = {1947}
+}
+
+@article{benjamini1995controlling,
+  title   = {Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing},
+  author  = {Benjamini, Yoav and Hochberg, Yosef},
+  journal = {Journal of the Royal Statistical Society: Series B},
+  volume  = {57},
+  number  = {1},
+  pages   = {289--300},
+  year    = {1995}
+}
+
+@article{bates2015lme4,
+  title   = {Fitting Linear Mixed-Effects Models Using {lme4}},
+  author  = {Bates, Douglas and M{\"a}chler, Martin and Bolker, Ben and Walker, Steve},
+  journal = {Journal of Statistical Software},
+  volume  = {67},
+  number  = {1},
+  pages   = {1--48},
+  year    = {2015}
+}
+
+% ---------------- Small models: surveys and technical reports ----------------
+@article{lu2024slm,
+  title   = {Small Language Models: Survey, Measurements, and Insights},
+  author  = {Lu, Zhenyan and Li, Xiang and Cai, Dongqi and Yi, Rongjie and Liu, Fangming and Zhang, Xiwen and Lane, Nicholas D. and Xu, Mengwei},
+  journal = {arXiv preprint arXiv:2409.15790},
+  year    = {2024}
+}
+
+@article{grattafiori2024llama3,
+  title   = {The {Llama} 3 Herd of Models},
+  author  = {Grattafiori, Aaron and Dubey, Abhimanyu and Jauhri, Abhinav and others},
+  journal = {arXiv preprint arXiv:2407.21783},
+  year    = {2024}
+}
+
+@article{qwen2025qwen25,
+  title   = {{Qwen2.5} Technical Report},
+  author  = {{Qwen Team}},
+  journal = {arXiv preprint arXiv:2412.15115},
+  year    = {2024}
+}
+
+@article{yang2025qwen3,
+  title   = {{Qwen3} Technical Report},
+  author  = {Yang, An and others},
+  journal = {arXiv preprint arXiv:2505.09388},
+  year    = {2025}
+}
+
+@article{gemmateam2024gemma2,
+  title   = {{Gemma 2}: Improving Open Language Models at a Practical Size},
+  author  = {{Gemma Team}},
+  journal = {arXiv preprint arXiv:2408.00118},
+  year    = {2024}
+}
+
+@article{gemmateam2025gemma3,
+  title   = {{Gemma 3} Technical Report},
+  author  = {{Gemma Team}},
+  journal = {arXiv preprint arXiv:2503.19786},
+  year    = {2025}
+}
+
+@misc{google2025gemma3n,
+  title        = {{Gemma 3n} Model Card},
+  author       = {{Google DeepMind}},
+  year         = {2025},
+  howpublished = {\url{https://ai.google.dev/gemma/docs/gemma-3n}}
+}
+
+@article{abdin2024phi3,
+  title   = {{Phi-3} Technical Report: A Highly Capable Language Model Locally on Your Phone},
+  author  = {Abdin, Marah and others},
+  journal = {arXiv preprint arXiv:2404.14219},
+  year    = {2024}
+}
+
+@article{microsoft2025phi4mini,
+  title   = {{Phi-4-Mini} Technical Report: Compact yet Powerful Multimodal Language Models via Mixture-of-{LoRAs}},
+  author  = {{Microsoft}},
+  journal = {arXiv preprint arXiv:2503.01743},
+  year    = {2025}
+}
+
+@article{jiang2023mistral,
+  title   = {{Mistral 7B}},
+  author  = {Jiang, Albert Q. and Sablayrolles, Alexandre and Mensch, Arthur and others},
+  journal = {arXiv preprint arXiv:2310.06825},
+  year    = {2023}
+}
+
+@misc{mistral2024ministral,
+  title        = {Un Ministral, des Ministraux: Introducing the World's Best Edge Models},
+  author       = {{Mistral AI}},
+  year         = {2024},
+  howpublished = {\url{https://mistral.ai/news/ministraux}}
+}
+
+@misc{mistral2024nemo,
+  title        = {{Mistral NeMo}},
+  author       = {{Mistral AI} and {NVIDIA}},
+  year         = {2024},
+  howpublished = {\url{https://mistral.ai/news/mistral-nemo}}
+}
+
+@article{allal2025smollm2,
+  title   = {{SmolLM2}: When Smol Goes Big --- Data-Centric Training of a Small Language Model},
+  author  = {Ben Allal, Loubna and Lozhkov, Anton and Bakouch, Elie and others},
+  journal = {arXiv preprint arXiv:2502.02737},
+  year    = {2025}
+}
+
+@misc{hf2025smollm3,
+  title        = {{SmolLM3}: Smol, Multilingual, Long-Context Reasoner},
+  author       = {{Hugging Face}},
+  year         = {2025},
+  howpublished = {\url{https://huggingface.co/blog/smollm3}}
+}
+
+@article{olmo2024olmo2,
+  title   = {2 {OLMo} 2 Furious},
+  author  = {{Team OLMo}},
+  journal = {arXiv preprint arXiv:2501.00656},
+  year    = {2024}
+}
+
+@misc{tii2024falcon3,
+  title        = {Welcome to the {Falcon 3} Family of Open Models!},
+  author       = {{Technology Innovation Institute}},
+  year         = {2024},
+  howpublished = {\url{https://huggingface.co/blog/falcon3}}
+}
+
+@article{lgai2024exaone35,
+  title   = {{EXAONE 3.5}: Series of Large Language Models for Real-world Use Cases},
+  author  = {{LG AI Research}},
+  journal = {arXiv preprint arXiv:2412.04862},
+  year    = {2024}
+}
+
+@misc{ibm2025granite33,
+  title        = {{IBM Granite 3.3} Language Models},
+  author       = {{IBM Granite Team}},
+  year         = {2025},
+  howpublished = {\url{https://huggingface.co/ibm-granite}}
+}
+
+@article{teknium2024hermes3,
+  title   = {{Hermes 3} Technical Report},
+  author  = {Teknium, Ryan and Quesnelle, Jeffrey and Guang, Chen},
+  journal = {arXiv preprint arXiv:2408.11857},
+  year    = {2024}
+}
+
+@article{deepseekai2025r1,
+  title   = {{DeepSeek-R1}: Incentivizing Reasoning Capability in {LLMs} via Reinforcement Learning},
+  author  = {{DeepSeek-AI}},
+  journal = {arXiv preprint arXiv:2501.12948},
+  year    = {2025}
+}
+
+@article{dang2024ayaexpanse,
+  title   = {{Aya Expanse}: Combining Research Breakthroughs for a New Multilingual Frontier},
+  author  = {Dang, John and others},
+  journal = {arXiv preprint arXiv:2412.04261},
+  year    = {2024}
+}

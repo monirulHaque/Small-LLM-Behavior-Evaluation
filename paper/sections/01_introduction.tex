@@ -1,0 +1,115 @@
+% =====================================================================
+\section{Introduction}
+\label{sec:intro}
+
+Language models with fewer than ten billion parameters have become the
+default way that many people, hobbyists, and on-device applications use
+generative AI. A 4-bit GGUF build of a 7--8B model needs about 5\,GB of
+memory and runs at interactive speed on an entry-level consumer GPU. Families
+such as Llama~3.x~\citep{grattafiori2024llama3}, Qwen2.5/Qwen3~\citep{qwen2025qwen25,yang2025qwen3},
+Gemma~2/3~\citep{gemmateam2024gemma2,gemmateam2025gemma3}, Phi~\citep{abdin2024phi3,microsoft2025phi4mini},
+Mistral~\citep{jiang2023mistral}, SmolLM~\citep{allal2025smollm2} and
+OLMo~\citep{olmo2024olmo2} are released with this kind of deployment in mind.
+Running locally keeps data private and avoids per-token cost. It also removes
+the provider-side moderation, monitoring and system prompts that frontier chat
+products wrap around their models. A small local model is therefore also the
+\emph{whole} assistant that the user interacts with.
+
+Yet the evaluation of small models remains dominated by capability
+benchmarks (knowledge, reasoning, coding, instruction following). The
+behaviours that shape the \emph{user's experience} and the user's safety have
+mostly been measured on frontier systems. These include sycophancy~\citep{sharma2024sycophancy,cheng2025elephant},
+manipulative ``dark patterns''~\citep{kran2025darkbench}, excessive refusal~\citep{rottger2024xstest,cui2025orbench},
+unfaithful expressions of uncertainty~\citep{yona2024faithfully,liu2025metafaith},
+failure to ask clarifying questions~\citep{zhang2024clamber}, and social or
+cognitive biases~\citep{parrish2022bbq,bai2025implicit,malberg2024cognitive}.
+When small models are included, it is usually as one or two points (\eg Llama-3-8B
+and Mistral-7B in DarkBench~\citep{kran2025darkbench}). In parallel, a fast-growing
+literature on quantization shows that compression has small aggregate effects on
+accuracy but non-trivial, often hidden, effects on safety, truthfulness and
+bias~\citep{hong2024decoding,kharinaev2025investigating,fu2025quantized,marcuzzi2026quantization,hua2026uncertainty,rath2026quantization,ferrara2026quantibias}.
+That literature has concentrated on social bias, toxicity, refusal, truthfulness and
+calibration. To our knowledge, \emph{interaction} behaviours such as sycophancy, dark
+patterns, refusal style, hedge faithfulness and clarification-seeking have not been
+measured on quantized small models.
+
+This paper closes that gap with a broad, behaviour-first evaluation of
+\textbf{thirty} small open models, all of which run on a single 8\,GB GPU. Our
+design has three properties:
+\begin{enumerate}[leftmargin=1.5em]
+  \item \textbf{Breadth of behaviours.} We measure nine behaviours (\cref{sec:behaviours})
+  in four clusters: \emph{agreeableness} (factual and social sycophancy),
+  \emph{manipulation and safety} (dark patterns, over-refusal and refusal style),
+  \emph{epistemic conduct} (hedge faithfulness, clarification-seeking,
+  cognitive biases) and \emph{social bias} (explicit vs.\ implicit). Verbosity
+  serves as a cross-cutting style variable.
+  \item \textbf{Breadth and structure of models.} The 30 models span 0.5--9B
+  parameters, 13 developers, and three model generations. They include
+  \emph{controlled contrasts}: size ladders within a family (\eg Qwen2.5
+  0.5/1.5/3/7B), generations at matched size (Qwen2.5 vs.\ Qwen3, Gemma~2 vs.\ 3,
+  Phi-3.5 vs.\ Phi-4), and three different post-training recipes applied to the
+  \emph{same} base model (Llama-3.1-8B-Instruct, Hermes-3, DeepSeek-R1-Distill-Llama-8B).
+  \item \textbf{Capability-controlled and item-level analysis.} Every model is also
+  scored on MMLU and IFEval, so behaviour can be related to capability. A
+  quantization sub-study then measures paired, item-level behaviour flips. Aggregate
+  scores are known to hide these flips~\citep{hua2026uncertainty,rath2026quantization}.
+\end{enumerate}
+
+\paragraph{Research questions.}
+\begin{description}[leftmargin=1.5em,font=\normalfont\bfseries]
+  \item[RQ1 (Landscape).] How do the nine behaviours vary across 30 small open
+  models, and how much of that variation is explained by parameter count?
+  \item[RQ2 (Recipe vs.\ scale).] Do developer family, model generation and
+  post-training recipe explain more behavioural variance than size? In particular,
+  how different are three post-trained variants of the same 8B base model?
+  \item[RQ3 (Quantization).] Does post-training quantization (16-bit $\rightarrow$
+  Q8\_0 $\rightarrow$ Q4\_K\_M $\rightarrow$ Q3\_K\_M $\rightarrow$ Q2\_K) change
+  interaction behaviours, and do open-ended behaviours drift more than
+  multiple-choice ones at matched capability?
+  \item[RQ4 (Structure).] Do the behaviours co-vary (\eg is a model that
+  flatters users also one that rarely refuses)? Are they explained by capability?
+  \item[RQ5 (Measurement).] How reliable are small, local, cross-family LLM judges
+  for these behaviours, and how sensitive are conclusions to prompt wording?
+\end{description}
+
+\paragraph{Hypotheses.} We pre-register the following directional hypotheses
+\guide{commit them in the repository before running the full grid}:
+\begin{description}[leftmargin=1.5em,font=\normalfont\bfseries]
+  \item[H1.] Factual sycophancy decreases with model size (larger models are more
+  confident in correct answers). Social sycophancy and dark patterns do \emph{not}
+  decrease monotonically with size.
+  \item[H2.] Within one base model, post-training recipe produces larger behavioural
+  differences than a 2--3$\times$ change in size within one family.
+  \item[H3.] Q8\_0 is behaviourally indistinguishable from 16-bit. Q4\_K\_M leaves
+  aggregate scores nearly flat but produces non-trivial paired item flips. Q3\_K\_M
+  and Q2\_K produce large shifts. Open-ended, judge-scored behaviours drift more
+  than multiple-choice behaviours.
+  \item[H4.] Behaviours form at least two partly independent clusters: an
+  \emph{agreeableness} cluster (sycophancy, dark patterns) and a \emph{caution}
+  cluster (over-refusal, hedging, clarification-seeking).
+  \item[H5.] Implicit (association-based) bias stays high in models whose explicit
+  (BBQ-ambiguous) bias is low, consistent with~\citet{bai2025implicit}.
+  \item[H6.] Behaviour scores are only weakly correlated with capability (MMLU),
+  so capability benchmarks do not predict the behaviours users experience.
+\end{description}
+
+\paragraph{Contributions.}
+\begin{itemize}[leftmargin=1.5em]
+  \item The largest behaviour-focused evaluation of \emph{small} open models to date
+  (30 models $\times$ 9 behaviours $+$ 2 capability controls). Everything runs on a
+  single consumer GPU.
+  \item The first quantization study of interaction behaviours (sycophancy, dark
+  patterns, refusal style, hedging, clarification) with item-level paired analysis.
+  \item A same-base, different-recipe comparison isolating the effect of post-training.
+  \item A validation of small local judges against hand labels for each judged behaviour.
+  \item A fully released, reproducible pipeline (prompts, GGUF SHA-256 hashes,
+  generations, judge outputs, analysis code).
+\end{itemize}
+
+\guide{Optionally add one sentence per headline finding here after the results are in.}
+
+\paragraph{Paper organisation.} \Cref{sec:related} reviews related work.
+\Cref{sec:models} describes the 30 models. \Cref{sec:behaviours} defines the
+behaviours and datasets. \Cref{sec:method} describes the inference, judging and
+statistical protocol. \Cref{sec:results} reports results. \Cref{sec:discussion}
+discusses implications. \Cref{sec:limitations} covers limitations and ethics.

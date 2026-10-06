@@ -1,0 +1,18 @@
+% =====================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+We evaluated 30 small open language models, all of which run on an 8\,GB consumer
+GPU, on nine user-facing behaviours: factual and social sycophancy, dark patterns,
+over-refusal and refusal style, hedge faithfulness, clarification-seeking,
+cognitive biases, explicit and implicit social bias, and verbosity. We added
+capability controls and a controlled quantization ladder.
+\guide{State the 3--4 main findings in one sentence each, matching the abstract.}
+\TBD
+
+\noindent These results suggest that small models should be chosen and documented
+by how they \emph{behave} towards users, and not only by what they \emph{know}.
+Behavioural evaluation should also be run on the quantized artefacts people actually
+deploy. \guide{Adjust this sentence to match your actual findings.} Future work
+should extend this to long multi-turn conversations, non-English prompts and other
+quantization formats (AWQ, GPTQ, EXL2). It should also test whether simple mitigations,
+such as anti-sycophancy or ``ask-first'' system prompts, transfer to small models.

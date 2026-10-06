@@ -1,0 +1,163 @@
+% =====================================================================
+\section{Models}
+\label{sec:models}
+
+\subsection{Selection criteria}
+We selected 30 instruction-tuned open-weight models according to five criteria:
+\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
+  \item \textbf{Fits an 8\,GB GPU.} The Q4\_K\_M GGUF build plus a 4k-token KV cache
+  must fit fully in the 8\,GB VRAM of an RTX~3050. This limits size to about 9B
+  parameters.
+  \item \textbf{Coverage of size.} Four size bins: $<$1.3B (4 models), 1.5--2.7B
+  (6), 3--4.5B (8) and 7--9B (12).
+  \item \textbf{Coverage of developers and training philosophies.} 13 developers,
+  including fully open (OLMo~2, SmolLM), multilingual (Aya Expanse, EXAONE), enterprise
+  (Granite) and community fine-tunes (Hermes~3).
+  \item \textbf{Controlled contrasts.} Size ladders within families (Qwen2.5, Qwen3,
+  Llama, Gemma, Granite), generation pairs at matched size (Qwen2.5$\rightarrow$Qwen3,
+  Gemma~2$\rightarrow$Gemma~3, Phi-3.5$\rightarrow$Phi-4-mini,
+  Mistral-7B$\rightarrow$Ministral-8B) and a \emph{same-base triplet}
+  (Llama-3.1-8B-Instruct, Hermes-3-Llama-3.1-8B, DeepSeek-R1-Distill-Llama-8B).
+  \item \textbf{Availability.} Official GGUF releases or GGUFs from a single,
+  well-known converter. We record the uploader, the imatrix used (if any), the
+  \texttt{llama.cpp} build, and the SHA-256 hash of every file (\cref{app:hashes}).
+\end{enumerate}
+
+\Cref{tab:models} lists the models. File sizes are approximate Q4\_K\_M sizes. The
+exact values must be read from the downloaded files.
+\guide{Verify every licence and GGUF size before submission. Replace any model you cannot obtain with one from the same size bin and family type.}
+
+\begin{table}[p]
+\centering
+\caption{The 30 evaluated models. Params = total parameters (billions).
+Q4 = approximate Q4\_K\_M GGUF size (GB). Type: I = standard instruct; R = reasoning
+(emits a chain of thought); H = hybrid thinking (switchable, evaluated with thinking
+\emph{off} unless stated); C = community fine-tune. Licence abbreviations:
+Apache = Apache-2.0; Llama = Llama Community Licence; Gemma = Gemma Terms of Use;
+NC = non-commercial research licence.}
+\label{tab:models}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}r l l r r c l l@{}}
+\toprule
+\# & Model (Hugging Face name) & Developer & Params & Q4 & Type & Release & Licence \\
+\midrule
+\multicolumn{8}{@{}l}{\textit{Bin 1: $<$1.3B}} \\
+1  & Qwen2.5-0.5B-Instruct          & Alibaba Qwen  & 0.49 & 0.4 & I & 2024-09 & Apache \\
+2  & Qwen3-0.6B                     & Alibaba Qwen  & 0.6  & 0.5 & H & 2025-04 & Apache \\
+3  & gemma-3-1b-it                  & Google        & 1.0  & 0.8 & I & 2025-03 & Gemma \\
+4  & Llama-3.2-1B-Instruct          & Meta          & 1.24 & 0.8 & I & 2024-09 & Llama \\
+\midrule
+\multicolumn{8}{@{}l}{\textit{Bin 2: 1.5--2.7B}} \\
+5  & Qwen2.5-1.5B-Instruct          & Alibaba Qwen  & 1.54 & 1.0 & I & 2024-09 & Apache \\
+6  & Qwen3-1.7B                     & Alibaba Qwen  & 1.7  & 1.3 & H & 2025-04 & Apache \\
+7  & SmolLM2-1.7B-Instruct          & Hugging Face  & 1.71 & 1.1 & I & 2024-11 & Apache \\
+8  & granite-3.3-2b-instruct        & IBM           & 2.5  & 1.5 & I & 2025-04 & Apache \\
+9  & gemma-2-2b-it                  & Google        & 2.6  & 1.7 & I & 2024-07 & Gemma \\
+10 & EXAONE-3.5-2.4B-Instruct       & LG AI Research& 2.7  & 1.6 & I & 2024-12 & NC \\
+\midrule
+\multicolumn{8}{@{}l}{\textit{Bin 3: 3--4.5B}} \\
+11 & Qwen2.5-3B-Instruct            & Alibaba Qwen  & 3.09 & 1.9 & I & 2024-09 & Qwen Research (NC) \\
+12 & SmolLM3-3B                     & Hugging Face  & 3.08 & 1.9 & H & 2025-07 & Apache \\
+13 & Llama-3.2-3B-Instruct          & Meta          & 3.21 & 2.0 & I & 2024-09 & Llama \\
+14 & Phi-3.5-mini-instruct          & Microsoft     & 3.82 & 2.4 & I & 2024-08 & MIT \\
+15 & Phi-4-mini-instruct            & Microsoft     & 3.84 & 2.5 & I & 2025-02 & MIT \\
+16 & Qwen3-4B-Instruct-2507         & Alibaba Qwen  & 4.0  & 2.5 & I & 2025-07 & Apache \\
+17 & gemma-3-4b-it                  & Google        & 4.3  & 2.5 & I & 2025-03 & Gemma \\
+18 & gemma-3n-E4B-it                & Google        & 4 eff.\ / 8 raw & 4.5 & I & 2025-06 & Gemma \\
+\midrule
+\multicolumn{8}{@{}l}{\textit{Bin 4: 7--9B}} \\
+19 & Mistral-7B-Instruct-v0.3       & Mistral AI    & 7.25 & 4.4 & I & 2024-05 & Apache \\
+20 & OLMo-2-1124-7B-Instruct        & Allen AI      & 7.3  & 4.5 & I & 2024-11 & Apache \\
+21 & Falcon3-7B-Instruct            & TII           & 7.46 & 4.6 & I & 2024-12 & TII Falcon \\
+22 & Qwen2.5-7B-Instruct            & Alibaba Qwen  & 7.62 & 4.7 & I & 2024-09 & Apache \\
+23 & Ministral-8B-Instruct-2410     & Mistral AI    & 8.02 & 4.9 & I & 2024-10 & Mistral Research (NC) \\
+24 & Llama-3.1-8B-Instruct          & Meta          & 8.03 & 4.9 & I & 2024-07 & Llama \\
+25 & Hermes-3-Llama-3.1-8B          & Nous Research & 8.03 & 4.9 & C & 2024-08 & Llama \\
+26 & DeepSeek-R1-Distill-Llama-8B   & DeepSeek      & 8.03 & 4.9 & R & 2025-01 & MIT / Llama \\
+27 & aya-expanse-8b                 & Cohere        & 8.03 & 5.1 & I & 2024-10 & CC-BY-NC \\
+28 & granite-3.3-8b-instruct        & IBM           & 8.2  & 4.9 & I & 2025-04 & Apache \\
+29 & Qwen3-8B                       & Alibaba Qwen  & 8.2  & 5.0 & H & 2025-04 & Apache \\
+30 & gemma-2-9b-it                  & Google        & 9.24 & 5.8 & I & 2024-06 & Gemma \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Technical reports.} Llama~\citep{grattafiori2024llama3};
+Qwen2.5~\citep{qwen2025qwen25}; Qwen3~\citep{yang2025qwen3};
+Gemma~2~\citep{gemmateam2024gemma2}; Gemma~3 and 3n~\citep{gemmateam2025gemma3,google2025gemma3n};
+Phi-3.5~\citep{abdin2024phi3}; Phi-4-mini~\citep{microsoft2025phi4mini};
+Mistral-7B~\citep{jiang2023mistral}; Ministral~\citep{mistral2024ministral};
+SmolLM2/3~\citep{allal2025smollm2,hf2025smollm3}; OLMo~2~\citep{olmo2024olmo2};
+Falcon~3~\citep{tii2024falcon3}; EXAONE~3.5~\citep{lgai2024exaone35};
+Granite~3.3~\citep{ibm2025granite33}; Hermes~3~\citep{teknium2024hermes3};
+DeepSeek-R1-Distill~\citep{deepseekai2025r1}; Aya Expanse~\citep{dang2024ayaexpanse}.
+
+\subsection{Controlled contrasts}
+\Cref{tab:contrasts} lists the planned contrasts. Each one isolates a single factor
+while the others are held (approximately) constant. These contrasts are the backbone
+of \RQ{2}.
+
+\begin{table}[ht]
+\centering
+\caption{Planned controlled contrasts (model numbers refer to \cref{tab:models}).}
+\label{tab:contrasts}
+\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X l@{}}
+\toprule
+Factor isolated & Models & RQ \\
+\midrule
+Size (within family) & Qwen2.5: 1, 5, 11, 22; Qwen3: 2, 6, 16, 29; Llama: 4, 13, 24; Gemma~3: 3, 17; Granite: 8, 28; SmolLM: 7, 12 & RQ1 \\
+Generation (matched size) & Qwen2.5 vs.\ Qwen3 (1/2, 5/6, 22/29); Gemma~2 vs.\ 3 (9/17, nearest size); Phi-3.5 vs.\ Phi-4-mini (14/15); Mistral-7B vs.\ Ministral-8B (19/23) & RQ2 \\
+Post-training recipe (same base) & Llama-3.1-8B-Instruct (24) vs.\ Hermes-3 (25) vs.\ R1-Distill-Llama-8B (26) & RQ2 \\
+Thinking on/off & Qwen3-1.7B (6), Qwen3-8B (29), SmolLM3-3B (12), each run with thinking on and off & RQ2 \\
+Openness of data & OLMo-2-7B (20), SmolLM2/3 (7, 12) vs.\ closed-data models of equal size & RQ2 \\
+Quantization & Sub-study, \cref{sec:quant-design} & RQ3 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Quantization sub-study}
+\label{sec:quant-design}
+Running the full precision ladder on all 30 models is out of budget. Instead, the
+sub-study uses six models: two size points from each of three families.
+\begin{center}
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Family & Small & Large \\
+\midrule
+Qwen3     & Qwen3-1.7B (6)     & Qwen3-8B (29) \\
+Llama     & Llama-3.2-3B (13)  & Llama-3.1-8B (24) \\
+Gemma / Phi & gemma-3-4b-it (17) & Phi-4-mini (15) \\
+\bottomrule
+\end{tabular}
+\end{center}
+Each model is run at \textbf{F16} (reference), \textbf{Q8\_0}, \textbf{Q4\_K\_M}
+(the main-study level), \textbf{Q3\_K\_M} and \textbf{Q2\_K}, giving
+$6 \times 5 = 30$ conditions, of which 24 are new. All GGUFs for one model are made
+from the same F16 conversion with the same \texttt{llama.cpp} build and the same
+importance matrix (or none). This ensures that quantization is the only difference
+between levels. F16 builds of models above about 3.5B, and Q8\_0 builds of 8B models,
+do not fit in 8\,GB. They are run with partial CPU offload (\texttt{-ngl} $<$ max).
+Offloading changes speed, not the computation. We still verify on 50 prompts that
+greedy outputs match a fully-on-GPU run where possible. Following
+\citet{ferrara2026quantibias}, we report \emph{effective bits per weight} (file size
+$\times 8$ / parameter count) in addition to the nominal label, and treat it as a
+continuous dose variable.
+
+\subsection{Judges}
+\label{sec:judges}
+Judged behaviours (\cref{tab:behaviours}) are scored by two local judges that are
+\emph{not} among the 30 evaluated models and that run on the same GPU in a separate
+pass (Q4\_K\_M, partial offload):
+\begin{itemize}[leftmargin=1.5em,itemsep=1pt]
+  \item \textbf{J1:} Qwen2.5-14B-Instruct~\citep{qwen2025qwen25}.
+  \item \textbf{J2:} Mistral-Nemo-Instruct-2407 (12B)~\citep{mistral2024nemo}.
+\end{itemize}
+\textbf{Cross-family rule:} a judge never scores outputs from its own family. Outputs
+from Qwen models are scored by J2 only, and outputs from Mistral-family models by J1
+only. All other outputs are scored by both judges, and disagreements are resolved by
+a third pass with the two rationales shown. Judge validity is checked against
+150 hand-labelled items per judged behaviour (\cref{sec:judge-validation}).
+\guide{If you have API credits, add a frontier judge on a 20\% subset as a third reference. This is optional.}

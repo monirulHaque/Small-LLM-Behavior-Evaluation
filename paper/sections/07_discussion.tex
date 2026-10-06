@@ -1,0 +1,41 @@
+% =====================================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\guide{Write after the results. The paragraph headings below are a suggested
+structure. Each paragraph has a guiding question, and the questions disappear when
+\texttt{\textbackslash showguidancefalse} is set.}
+
+\paragraph{Capability benchmarks are a poor proxy for user-facing behaviour.}
+\guide{Use \Hyp{6} and \cref{fig:structure}. How much would a practitioner who picks
+models by MMLU or IFEval miss?}
+\TBD
+
+\paragraph{Post-training, not size, shapes how small models treat users.}
+\guide{Use \Hyp{2}, \cref{tab:variance,tab:triplet}. What does this imply for
+community fine-tunes and distilled reasoning models that users download?}
+\TBD
+
+\paragraph{Quantization changes behaviour that aggregate scores do not show.}
+\guide{Use \Hyp{3}. How do these results relate to the bias/safety findings of
+\citet{hua2026uncertainty}, \citet{rath2026quantization} and
+\citet{ferrara2026quantibias}? Which precision would you recommend for local
+assistants?}
+\TBD
+
+\paragraph{The construct validity of sycophancy and caution.}
+\guide{Do factual and social sycophancy move together? Do over-refusal, hedging and
+clarification form one ``caution'' trait or several? Relate this to
+\citet{ye2026sycophancy}.}
+\TBD
+
+\paragraph{Implications for practitioners and for HCI.}
+\guide{Concrete recommendations: which models and precisions to choose for which
+use case, which mitigations (system prompts, ``ask-first'' instructions) are worth
+trying, and what model cards for local models should report.}
+\TBD
+
+\paragraph{Implications for evaluation methodology.}
+\guide{Judge reliability, template sensitivity, invalid outputs as a behaviour, and
+item-level analysis.}
+\TBD

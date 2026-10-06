@@ -1,0 +1,54 @@
+% =====================================================================
+\section{Limitations}
+\label{sec:limitations}
+
+\paragraph{Small local judges.} Judged behaviours rely on 12--14B local judges, which
+are noisier than frontier judges. We quantify this error by validating against hand
+labels and reporting per-behaviour $\kappa$ (\cref{tab:judge-kappa}), and we mark
+behaviours with low agreement as exploratory. The hand labels come from a single
+annotator, the author. This is not a human-subjects study, and inter-annotator
+agreement between several humans is not available.
+
+\paragraph{Benchmark contamination.} BBQ, MMLU, TriviaQA and XSTest are likely to
+appear in the training data of some models. Absolute levels should be interpreted
+with caution. Our main conclusions rely on within-model contrasts (paired flips,
+quantization deltas, template contrasts), which are less affected by contamination.
+
+\paragraph{Single-turn and short multi-turn settings.} Except for \Bx{1} (two turns),
+behaviours are measured in single-turn interactions. Anthropomorphic behaviours and
+sycophancy can first appear only after several turns~\citep{ibrahim2025multiturn,hong2025sycon,laban2025lost}.
+Our rates are therefore likely lower bounds for long conversations.
+
+\paragraph{GGUF artefact heterogeneity.} GGUF builds differ by uploader, importance
+matrix and \texttt{llama.cpp} version. Build differences can change behaviour, and
+GGUF quantization can even be adversarially exploited~\citep{egashira2025mindgap}. We
+record SHA-256 hashes and the build, but our results describe these specific
+artefacts. Other builds with the same nominal label may behave differently.
+
+\paragraph{Model sample and English only.} The 30 models are a convenience sample,
+limited by an 8\,GB GPU and by availability in October 2026, and they are not a random
+sample of all small models. All prompts are in English. Bias and safety effects of
+quantization are known to be larger in some non-English settings~\citep{alhakim2026preserving,ferrara2026quantibias}.
+
+\paragraph{Decoding settings.} Greedy decoding is reproducible, but it does not show
+the sampling variability that users experience with default chat temperatures. Only
+\Bx{5} uses sampling.
+
+\paragraph{Statistical power across models.} With 30 models, cross-model correlation
+and PCA analyses are descriptive. Confirmatory claims rely on item-level mixed
+models with thousands of observations.
+
+\guide{Add limitations you discover while running the study.}
+
+% ---------------------------------------------------------------------
+\section{Ethical Considerations}
+\label{sec:ethics}
+This study involves no human participants. All datasets are public, and we follow
+their licences (ELEPHANT uses public Reddit posts as released by its authors). Some
+prompts (OR-Bench-Toxic, XSTest unsafe, DarkBench harmful generation) ask for harmful
+content. We do not publish harmful generations verbatim in the paper, and we release
+them only under the source datasets' terms with a content warning. Bias probes
+necessarily mention demographic groups. We report aggregate results and avoid
+reproducing stereotyped outputs. Several models carry non-commercial licences, and
+our use is non-commercial research. Finally, the study runs on a single consumer
+GPU. We report total energy use (GPU-hours $\times$ measured board power $=$ \TBD\,kWh).
