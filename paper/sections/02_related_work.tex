@@ -1,0 +1,227 @@
+% =====================================================================
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Small language models and local deployment}
+Most open-weight model families now include models designed to run on consumer
+hardware. Examples are Llama~3.2 (1B, 3B) and Llama~3.1 (8B)~\citep{grattafiori2024llama3};
+Qwen2.5 (0.5--7B)~\citep{qwen2025qwen25} and Qwen3 (0.6--8B, with a switchable
+``thinking'' mode)~\citep{yang2025qwen3}; Gemma~2 and Gemma~3~\citep{gemmateam2024gemma2,gemmateam2025gemma3};
+Phi-3.5 and Phi-4-mini~\citep{abdin2024phi3,microsoft2025phi4mini};
+Mistral-7B~\citep{jiang2023mistral}; SmolLM2~\citep{allal2025smollm2};
+the fully open OLMo~2~\citep{olmo2024olmo2}; EXAONE~3.5~\citep{lgai2024exaone35};
+and multilingual models such as Aya Expanse~\citep{dang2024ayaexpanse}.
+Distillation has also brought explicit chain-of-thought ``reasoning'' to this scale
+(DeepSeek-R1-Distill~\citep{deepseekai2025r1}). \citet{lu2024slm} survey small
+language models and their on-device measurements. Their focus, like that of most
+technical reports, is capability and efficiency rather than user-facing behaviour.
+Holistic evaluation frameworks such as HELM~\citep{liang2023helm} and
+DecodingTrust~\citep{wang2023decodingtrust} include behavioural dimensions, but
+their model coverage is dominated by larger or API-served systems.
+
+In practice, local deployment almost always means a \emph{quantized} model.
+Typical builds are GGUF k-quants run by \texttt{llama.cpp}~\citep{gerganov2023llamacpp}
+or Ollama. Users therefore do not experience the BF16 checkpoint that was
+evaluated in the technical report. They experience a compressed artefact, often
+produced by a third party. \citet{egashira2025mindgap} show that this artefact can
+even be manipulated so that malicious behaviour appears \emph{only} after GGUF
+quantization. Behavioural evaluation of small models therefore has to be done on the
+quantized artefacts users actually run, not only on the reference checkpoint.
+
+\subsection{Quantization: accuracy, calibration, safety, truthfulness and bias}
+Post-training quantization (PTQ) methods such as LLM.int8()~\citep{dettmers2022llmint8},
+GPTQ~\citep{frantar2023gptq} and AWQ~\citep{lin2024awq} reduce weights to 8, 4 or
+fewer bits with small perplexity loss. \citet{dettmers2023case} argue that 4-bit
+precision is close to optimal for a fixed memory budget. Broad evaluations confirm
+that 4-bit quantization preserves most benchmark accuracy, while 3-bit and below
+degrade it~\citep{jin2024comprehensive}.
+
+\paragraph{Beyond accuracy.} A second line of work asks what aggregate accuracy hides.
+\citet{proskurina2024quantization} find that quantization affects model confidence
+and calibration, especially on items where the original model was already uncertain.
+\citet{ayadi2026reliability} derive reliability scaling laws for quantized models
+(1B--70B, six methods). They find that 4-bit offers the best reliability--efficiency
+trade-off and that 4-bit quantization does not degrade robustness to prompt
+perturbations. \citet{hong2024decoding} (\emph{Decoding Compressed Trust}) evaluate
+eight trust dimensions under several compression methods. They find that 4-bit
+quantization largely retains trustworthiness, while 3-bit degrades it.
+\citet{kharinaev2025investigating} evaluate multiple PTQ and quantization-aware
+methods on Llama and Mistral models. They introduce the open-ended OpenSafetyMini
+dataset and find that no single quantization method is uniformly best for safety.
+\citet{fu2025quantized} report that quantized models remain largely truthful
+internally, but that deceptive system prompts can override truthful outputs at
+every precision. \citet{xu2024beyond} evaluate the safety of compressed models
+across several dimensions, including dialect bias.
+
+\paragraph{Quantization and social bias.} Bias under quantization is now well
+studied. \citet{marcuzzi2026quantization} find that quantization tends to reduce
+toxicity, leaves sentiment largely unchanged, and slightly increases stereotypes and
+unfairness in generative tasks, especially under aggressive compression.
+\citet{hua2026uncertainty} evaluate 50 quantized models on 13 bias datasets. They
+show that up to 21\% of responses flip between biased and unbiased states while
+aggregate bias scores do not change. Flips concentrate on items where the model is
+uncertain, and 4-bit models show several times more changes than 8-bit models.
+\citet{rath2026quantization} quantize Qwen2.5-7B, Mistral-7B and Phi-3.5-mini from
+BF16 to 3-bit on more than 12k BBQ items. At 3-bit, 6--21\% of previously unbiased
+items become stereotyped and the rate of ``unknown'' answers falls by 17.4\%. Even
+at 4-bit, where perplexity changes by less than 3\%, 2.5--5.6\% of items flip.
+\citet{ferrara2026quantibias} shows that quantized models keep refusing harmful
+requests and keep choosing unbiased multiple-choice answers. However, they volunteer
+stereotypes in about a quarter of open-ended answers, and nominal precision labels
+understate how much a released build has actually been compressed.
+\citet{alhakim2026preserving} study fairness and safety across languages and propose
+protecting critical weights during quantization.
+
+\paragraph{The gap.} Taken together, this work shows that (i)~short-form,
+multiple-choice checks tend to stay flat under quantization while open-ended
+behaviour drifts, and (ii)~item-level effects are hidden by averages. However, the
+behaviours studied are social bias, toxicity, refusal, truthfulness and calibration.
+To our knowledge, \emph{interaction} behaviours such as sycophancy, dark patterns,
+refusal \emph{style}, hedge faithfulness and clarification-seeking have not been
+studied under quantization. Our quantization sub-study targets exactly this gap.
+
+\subsection{Sycophancy}
+Sycophancy is the tendency of a model to tailor its output to what the user appears
+to want rather than to what is true or appropriate. \citet{perez2023discovering}
+found that larger and more RLHF-trained models increasingly repeat a user's stated
+views. \citet{sharma2024sycophancy} showed that sycophancy is consistent across five
+frontier assistants and is partly driven by human preference data favouring
+agreeable answers. They released the \texttt{sycophancy-eval} suite (feedback,
+``are you sure?'', answer and mimicry splits). \citet{wei2023simple} showed that
+synthetic data interventions reduce it. Later benchmarks split the construct
+further. SycEval~\citep{fanous2025syceval} measures \emph{progressive} (wrong
+$\rightarrow$ right) and \emph{regressive} (right $\rightarrow$ wrong) answer flips
+under simple and citation-backed rebuttals. SYCON Bench~\citep{hong2025sycon}
+measures how quickly and how often models give in under sustained multi-turn
+pushback. ELEPHANT~\citep{cheng2025elephant} introduces \emph{social} sycophancy,
+\ie excessive preservation of the user's ``face'' through emotional validation,
+indirectness and accepting the user's framing. It is measured on open-ended advice
+questions and on r/AmITheAsshole posts where the crowd verdict is ``You're the
+Asshole''. SyPS~\citep{syps2026} shows that sycophancy rates change substantially
+with the wording of the prompt (user confidence, emotional pressure, social
+consensus). A 2026 taxonomy and expert survey calls sycophancy a ``fragmented
+construct''~\citep{ye2026sycophancy}, which motivates measuring several sub-types
+side by side, as we do. Small models appear in some of these studies. ELEPHANT and
+SyPS include 3--8B open models, and SYCON includes several small models. However, no
+study has compared factual and social sycophancy across many small models, or under
+quantization.
+
+\subsection{Dark patterns and anthropomorphism}
+DarkBench~\citep{kran2025darkbench} adapts the HCI notion of dark patterns to LLMs.
+It contains 660 prompts covering six categories: brand bias, user retention,
+sycophancy, anthropomorphization, harmful generation and sneaking. Across 14 models,
+the authors found dark patterns in a large share of conversations. Only two models
+were 8B or smaller (Llama-3-8B and Mistral-7B). Annotation relied on frontier-model
+judges. Related work studies anthropomorphic behaviour in multi-turn dialogue.
+\citet{ibrahim2025multiturn} evaluate 14 anthropomorphic behaviours with simulated
+users and find that many behaviours first appear only after several turns. They test
+only frontier systems. \citet{cheng2025humt} propose HumT, a cheap probability-based
+measure of human-like tone. Whether small, locally run assistants show these
+patterns as often as frontier ones is an open question. Local models are an
+especially relevant case because no provider-side policy layer sits between them and
+the user.
+
+\subsection{Refusal and over-refusal}
+Safety training can make models refuse benign requests that superficially resemble
+harmful ones. XSTest~\citep{rottger2024xstest} contrasts 250 safe prompts (\eg
+``How do I kill a Python process?'') with 200 unsafe ones. OR-Bench~\citep{cui2025orbench}
+scales this to 80k ``seemingly toxic'' prompts with a hard 1k subset and evaluates
+32 models, including Llama-3-8B. FalseReject~\citep{falsereject2025} further studies
+over-refusal and how to mitigate it. \citet{refusalcompliance2026} audit the
+refusal--compliance trade-off at scale. They show that two LLM judges agree strongly
+on over-refusal but only weakly on harmful compliance. This is an important caution
+for judge-based refusal metrics. Prior work mostly treats refusal as binary. The
+\emph{style} of a refusal also shapes the user's experience: lecturing, moralising,
+apologising, or offering a safe alternative. We code refusal style explicitly. To
+our knowledge it has not been studied as an outcome across small models or under
+quantization.
+
+\subsection{Uncertainty expression and clarification-seeking}
+LLMs can express uncertainty verbally~\citep{lin2022teaching} and partly ``know what
+they know''~\citep{kadavath2022language}. However, verbalised confidence is often
+over-confident~\citep{xiong2024can}. \citet{yona2024faithfully} define
+\emph{faithful} uncertainty as the match between how decisively a model words its
+answer and its intrinsic confidence (measured through sampling consistency). They
+propose a faithfulness metric, cMFG, and find that frontier models hedge
+unfaithfully. MetaFaith~\citep{liu2025metafaith} studies this systematically and
+proposes prompt-based calibration. These studies focus on larger models. Small
+models, where intrinsic uncertainty is highest, are under-studied. A related
+behaviour is \emph{asking} instead of guessing. AmbigQA~\citep{min2020ambigqa} showed
+that many open-domain questions are ambiguous. CLAMBER~\citep{zhang2024clamber}
+provides a taxonomy and benchmark for ambiguous queries and finds that LLMs rarely
+ask clarifying questions and are poor at recognising ambiguity. In multi-turn
+settings, \citet{laban2025lost} show that models ``get lost'' when instructions
+arrive gradually. Across 15 models, they report an average 39\% performance drop,
+driven mainly by unreliability. They attribute part of this to premature
+assumptions instead of clarification.
+
+\subsection{Social bias: explicit, implicit and covert}
+BBQ~\citep{parrish2022bbq} is the standard multiple-choice probe of social bias across
+nine categories. In \emph{ambiguous} contexts the correct answer is ``unknown'', so
+choosing a stereotyped answer reveals reliance on stereotypes. Explicit bias on such
+probes has fallen sharply with alignment training. However, \citet{bai2025implicit}
+show that explicitly unbiased models still form biased \emph{associations} when tested
+with an LLM analogue of the Implicit Association Test~\citep{greenwald1998iat}, and
+that these associations predict discriminatory decisions. \citet{hofmann2024dialect}
+show covert, dialect-based prejudice (against African American English) that
+persists, and can grow, as overt stereotypes decrease. \citet{rozado2025hiring} find
+gender and positional biases in LLM hiring decisions. The contrast between explicit
+and implicit bias is therefore a natural ``anchor''. It links our study to the
+saturated quantization-and-bias literature while still adding something new.
+
+\subsection{Cognitive biases}
+Classic judgement biases such as anchoring~\citep{tversky1974judgment} and framing
+effects~\citep{tversky1981framing} have been ported to LLMs. \citet{malberg2024cognitive}
+evaluate 30 cognitive biases across 20 models with a scalable test framework, and
+report surprisingly low average bias for some small models (\eg Llama-3.2-1B). Order
+and position effects in multiple-choice questions are well documented: models
+prefer particular option IDs~\citep{zheng2024large} and are sensitive to superficial
+prompt formatting~\citep{sclar2024quantifying}. No study we found has measured cognitive
+biases systematically across many small models or under quantization. These probes
+are also cheap to run.
+
+\subsection{Evaluation methodology: LLM judges, prompt sensitivity and item-level analysis}
+Open-ended behaviours need an evaluator. LLM-as-a-judge~\citep{zheng2023judging} is
+standard, but judges show position, verbosity and self-preference
+biases~\citep{wataoka2024selfpreference,ye2024justice}. Judging a model with a model of
+the same family is therefore risky. Small local judges are noisier than frontier
+judges. The recommended mitigation is to validate them against a hand-labelled
+sample and report agreement (Cohen's $\kappa$~\citep{cohen1960coefficient}). Prompt
+sensitivity is a second threat~\citep{sclar2024quantifying,syps2026}. We use at least
+two prompt templates for every judged behaviour. Finally, following
+\citet{hua2026uncertainty} and \citet{rath2026quantization}, we analyse \emph{paired},
+item-level changes (McNemar's test~\citep{mcnemar1947note}) in addition to aggregate
+rates.
+
+\subsection{Positioning}
+\Cref{tab:gap} summarises the evidence for each behaviour. Two gaps motivate this
+work. First, no study measures \emph{many interaction behaviours across many small
+open models} with capability controls. Second, no study measures how quantization
+affects interaction behaviours. The behaviours we study are the ones most directly
+experienced by users of local assistants.
+
+\begin{table}[t]
+\centering
+\caption{Evidence map for the behaviours studied. ``Small'' = evaluated on several
+$\leq$9B models; ``Quant.'' = evaluated under quantization. \guide{Re-check this
+table the week you submit; this area moves monthly.}}
+\label{tab:gap}
+\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X cc@{}}
+\toprule
+Behaviour & Representative work & Small & Quant. \\
+\midrule
+Factual sycophancy        & \citet{sharma2024sycophancy,fanous2025syceval,hong2025sycon} & partial & no \\
+Social sycophancy         & \citet{cheng2025elephant,syps2026} & partial & no \\
+Dark patterns             & \citet{kran2025darkbench} & 2 models & no \\
+Over-refusal              & \citet{rottger2024xstest,cui2025orbench} & yes & partial \\
+Refusal style             & --- & no & no \\
+Hedge faithfulness        & \citet{yona2024faithfully,liu2025metafaith} & few & no \\
+Calibration (reference)   & \citet{proskurina2024quantization,ayadi2026reliability} & yes & yes \\
+Clarification-seeking     & \citet{zhang2024clamber,laban2025lost} & partial & no \\
+Cognitive biases          & \citet{malberg2024cognitive} & partial & no \\
+Explicit social bias      & \citet{parrish2022bbq,hua2026uncertainty,rath2026quantization} & yes & yes (saturated) \\
+Implicit / covert bias    & \citet{bai2025implicit,hofmann2024dialect} & partial & no \\
+\bottomrule
+\end{tabularx}
+\end{table}

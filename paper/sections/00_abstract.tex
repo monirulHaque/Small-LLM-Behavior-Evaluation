@@ -1,0 +1,32 @@
+% =====================================================================
+\begin{abstract}
+Small open-weight language models (roughly 0.5--9B parameters) now run
+locally on laptops and consumer GPUs, usually in 4-bit GGUF form through
+tools such as \texttt{llama.cpp} and Ollama. They are evaluated almost
+exclusively on accuracy benchmarks, while the behaviours users actually
+experience---agreeing with the user against the evidence, manipulating
+them, refusing benign requests, hedging unfaithfully, answering ambiguous
+questions without asking, and expressing social or cognitive bias---have
+been measured mostly on frontier models. We present a multi-behaviour
+evaluation of \textbf{30 small open models from 13 developers} that all run
+on a single 8\,GB GPU (NVIDIA RTX~3050). We measure nine behaviours:
+factual sycophancy, social sycophancy, dark patterns, over-refusal and refusal
+style, hedge faithfulness, clarification-seeking, cognitive biases, explicit
+versus implicit social bias, and verbosity. We pair them with capability controls
+(MMLU, IFEval) so that behaviour differences can be separated from
+capability differences. A controlled quantization sub-study (six models
+$\times$ five precision levels from 16-bit to 2-bit) tests whether
+post-training compression changes how models \emph{treat users} even when task
+accuracy is preserved, using item-level paired flip analysis rather than
+aggregate scores. Judged behaviours are scored by two cross-family local
+judges, which we validate against hand-labelled samples.
+\guide{Summarise the 3--4 headline findings here once results are in, e.g.\
+``We find that \ldots; model size explains only \TBD\% of variance in \ldots;
+post-training recipe matters more than size for \ldots; 4-bit quantization leaves
+aggregate scores flat but flips \TBD\% of items for \ldots''.}
+We release all prompts, model hashes, raw generations, judge outputs and
+analysis code.
+\end{abstract}
+
+\noindent\textbf{Keywords:} small language models, behavioural evaluation,
+sycophancy, dark patterns, over-refusal, uncertainty, bias, quantization, GGUF.

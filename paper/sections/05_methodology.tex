@@ -1,0 +1,157 @@
+% =====================================================================
+\section{Experimental Protocol}
+\label{sec:method}
+
+\subsection{Hardware and inference stack}
+All generations run on one machine. \guide{Fill in: CPU, RAM, OS.} It has an NVIDIA
+GeForce RTX~3050 with 8\,GB of VRAM. Models are served with \texttt{llama.cpp}
+\texttt{llama-server}~\citep{gerganov2023llamacpp} (build \TBD) through its
+OpenAI-compatible API. We use \texttt{llama.cpp} directly rather than Ollama so that
+the chat template, context length, sampling parameters and seed are all set
+explicitly.\footnote{Ollama's defaults (context length, templates, system prompts)
+vary across models and versions. If you use Ollama, pin the version and the
+\texttt{Modelfile} of every model.} Settings used for every model:
+\begin{itemize}[leftmargin=1.5em,itemsep=1pt]
+  \item Context length 4{,}096 tokens (8{,}192 for R1-Distill and thinking-on runs);
+  all layers on the GPU (\texttt{-ngl 99}) unless stated; flash attention on;
+  \texttt{--parallel} \TBD\ slots.
+  \item The official chat template embedded in each GGUF (checked against the Hugging
+  Face \texttt{tokenizer\_config.json}).
+  \item \textbf{No system prompt}, except where a benchmark specifies one. Models
+  that ship a default system prompt in their template keep it, and we record this.
+  \item Greedy decoding (temperature 0) for all primary measurements. Temperature 1.0
+  and top-$p$ 1.0 for the five sampled answers in \Bx{5}. Fixed seed (\TBD).
+  \item Maximum new tokens: 16 for multiple-choice items, 512 for open-ended items,
+  and 2{,}048 for reasoning traces.
+\end{itemize}
+
+\paragraph{Reasoning and hybrid models.} For R1-Distill-Llama-8B, the
+\texttt{<think>}\ldots\texttt{</think>} block is removed before scoring and judging.
+Its length is logged as a separate variable. Hybrid models (Qwen3, SmolLM3) are run
+with thinking \emph{off} in the main study (\texttt{/no\_think} or the template
+flag). For the contrast in \cref{tab:contrasts}, they are also run with thinking
+\emph{on}. A response that hits the token limit without a final answer is counted as
+\emph{invalid*} and reported separately.
+
+\subsection{Prompt templates and sensitivity}
+Each judged behaviour (\Bx{2}, \Bx{3}, \Bx{4}, \Bx{6}) and \Bx{1} is run with two
+paraphrased templates (\cref{app:prompts}): the original benchmark template (T1) and
+a paraphrase (T2) that keeps the same content. The two templates are counterbalanced:
+each item is assigned to T1 or T2 at random, with a fixed seed. A 100-item subset is
+run with \emph{both} templates to estimate template sensitivity (\RQ{5}). The template
+is a random effect in all models (\cref{sec:stats}).
+
+\subsection{Answer extraction and invalid responses}
+Multiple-choice answers are extracted with an ordered set of regular expressions.
+These cover the option letter alone, ``The answer is X'', and the option text matched
+back to its letter. If no rule fires, an LLM extractor (J1) is used as a fallback.
+The extraction failure rate is reported per model. Responses that do not answer the
+format (\eg no YTA/NTA verdict, no option chosen) are kept as \emph{invalid}. We
+report invalid rates per behaviour, because invalid output is itself a behaviour of
+small models.
+
+\subsection{LLM judging}
+Judges (\cref{sec:judges}) receive a fixed rubric, the user prompt, and the model
+response with the reasoning trace removed. They return a JSON object with a label
+and a one-sentence rationale. Judges run at temperature 0. The order of any compared
+items is randomised to limit position bias~\citep{zheng2023judging}. The judge is not
+told which model produced the response, and it is never shown the quantization level.
+
+\subsection{Judge validation}
+\label{sec:judge-validation}
+For each judged behaviour, the author hand-labels a stratified sample of 150
+responses, without knowing which model produced them. The sample is stratified over
+model size bins and judge labels, so that rare labels are represented. Hand-labelling
+uses the same codebook as the judges (\cref{app:codebook}). For each behaviour we
+report Cohen's $\kappa$~\citep{cohen1960coefficient} for (i)~J1 vs.\ human,
+(ii)~J2 vs.\ human, (iii)~J1 vs.\ J2, and (iv)~the resolved label vs.\ human. Following
+\citet{refusalcompliance2026}, we report agreement separately for each sub-label
+(\eg over-refusal vs.\ harmful compliance), because agreement can differ widely
+between them. A judged behaviour whose resolved-label $\kappa$ is below 0.6 is
+reported as \emph{exploratory}. To check intra-rater reliability, 30 items are
+re-labelled after one week.
+
+\subsection{Statistical analysis}
+\label{sec:stats}
+\paragraph{Uncertainty.} All rates are reported with 95\% confidence intervals from
+a non-parametric bootstrap over items (2{,}000 resamples).
+
+\paragraph{RQ1/RQ2: Mixed-effects models.} For each binary behaviour outcome we fit a
+logistic mixed-effects model:
+\begin{equation}
+\label{eq:glmm}
+\operatorname{logit} P(y_{mi}=1) = \beta_0 + \beta_1 \log_2(\text{params}_m)
+ + \boldsymbol{\beta}_{\text{fam}} + \boldsymbol{\beta}_{\text{type}}
+ + \beta_v\, \text{verbosity}_{mi} + u_i + w_{t(i)},
+\end{equation}
+with random intercepts for item ($u_i$) and template ($w_t$). Here
+$\boldsymbol{\beta}_{\text{fam}}$ are developer-family effects and
+$\boldsymbol{\beta}_{\text{type}}$ are model-type effects (instruct / reasoning /
+hybrid / community). Continuous outcomes (cMFG, bias indices) use linear mixed
+models. We compare nested models with likelihood-ratio tests to estimate how much
+variance size and family each explain (\RQ{2}). Models are fitted with
+\texttt{lme4}~\citep{bates2015lme4} or \texttt{statsmodels}.
+
+\paragraph{RQ2: Same-base triplet.} Pairwise McNemar tests~\citep{mcnemar1947note}
+on item-level outcomes, comparing Llama-3.1-8B-Instruct with Hermes-3 and with
+R1-Distill.
+
+\paragraph{RQ3: Quantization.} For each model $\times$ level we compare against the
+F16 reference with:
+(i)~the \textbf{paired flip rate}, \ie the share of items whose label changes, split
+into harmful and benign directions (\eg unbiased $\rightarrow$ biased vs.\ the
+reverse), with a McNemar test;
+(ii)~the aggregate change, $\Delta$ rate with a bootstrap CI;
+(iii)~a dose--response model, \cref{eq:glmm} restricted to the sub-study, with
+effective bits per weight as a continuous predictor and bits $\times$ size and
+bits $\times$ family interactions. Behaviour change at \emph{matched capability} is
+assessed by including MMLU accuracy at each level as a covariate. Following
+\citet{hua2026uncertainty}, we test whether flips concentrate on items where the F16
+model was uncertain, using the \Bx{5} sampling consistency or the option entropy.
+
+\paragraph{RQ4: Structure across behaviours.} We compute Spearman correlations between
+the 30 models' primary metrics (and MMLU/IFEval), followed by an exploratory principal
+component analysis. With $n=30$ models this analysis is descriptive. We do not claim
+a latent factor structure.
+
+\paragraph{Multiple comparisons.} All confirmatory tests of \Hyp{1}--\Hyp{6} are
+corrected with Benjamini--Hochberg at $q=0.05$~\citep{benjamini1995controlling}.
+Everything else is labelled exploratory.
+
+\subsection{Compute budget}
+\label{sec:compute}
+\Cref{tab:compute} reports the measured throughput and wall-clock time. As a planning
+estimate, before measurement: at about 0.6M output tokens per model and
+25--35\,tok/s for a single 7--8B Q4 stream on an RTX~3050, a large model needs
+roughly 5--7\,GPU-hours, and smaller models proportionally less. Parallel slots in
+\texttt{llama-server} increase aggregate throughput. \guide{Measure on day 1 with one
+model per size bin and update this paragraph. If the grid is too slow, cut the
+\Bx{5} sample count first (5$\rightarrow$3), then the \Bx{4} and \Bx{8} item counts.}
+
+\begin{table}[ht]
+\centering
+\caption{Measured compute per size bin (fill in after the pilot).}
+\label{tab:compute}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Size bin & Prompt tok/s & Gen.\ tok/s & GPU-hours / model & Total GPU-hours \\
+\midrule
+$<$1.3B (4 models)    & \TBD & \TBD & \TBD & \TBD \\
+1.5--2.7B (6 models)  & \TBD & \TBD & \TBD & \TBD \\
+3--4.5B (8 models)    & \TBD & \TBD & \TBD & \TBD \\
+7--9B (12 models)     & \TBD & \TBD & \TBD & \TBD \\
+Quant.\ sub-study (24 conditions) & \TBD & \TBD & \TBD & \TBD \\
+Judging (J1 + J2)      & \TBD & \TBD & --- & \TBD \\
+\midrule
+\textbf{Total} & & & & \TBD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Reproducibility}
+We release: (i)~the exact GGUF file names, uploaders and SHA-256 hashes
+(\cref{app:hashes}); (ii)~the \texttt{llama.cpp} commit; (iii)~all prompts, templates
+and item IDs; (iv)~raw generations and judge outputs in JSONL; (v)~the hand labels;
+and (vi)~the analysis notebooks. Repository: \guide{URL}.

@@ -1,0 +1,381 @@
+% =====================================================================
+\section{Results}
+\label{sec:results}
+
+\guide{Write this section after the runs. Each subsection already has its table,
+a figure placeholder and an observation box with guiding questions. Report the
+numbers first, then interpret. Keep speculation for \cref{sec:discussion}.}
+
+% ---------------------------------------------------------------------
+\subsection{Measurement quality: judge agreement and invalid responses}
+\label{sec:res-judges}
+
+\begin{table}[htbp]
+\centering
+\caption{Judge validation on 150 hand-labelled items per judged behaviour (Cohen's
+$\kappa$). ``Resolved'' = the final label after the disagreement pass.}
+\label{tab:judge-kappa}
+\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Behaviour (label) & J1--Human & J2--Human & J1--J2 & Resolved--Human & Intra-rater & Status \\
+\midrule
+\Bx{2} Emotional validation & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\Bx{2} Indirectness         & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\Bx{2} Accepts framing      & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\Bx{3} Dark pattern (any)   & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\Bx{4} Refusal vs.\ compliance & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\Bx{4} Refusal style        & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\Bx{5} Decisiveness (binned)& \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\Bx{6} Clarifying question  & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{observation}[Judge reliability and invalid outputs]
+\questions{
+\item Which behaviours reach $\kappa \geq 0.6$? Which must be reported as exploratory?
+\item Do the judges disagree systematically on some models (\eg very short or very verbose outputs)?
+\item How large are invalid/format-failure rates for the smallest models, and do they change the conclusions?
+\item How sensitive are the results to the template (T1 vs.\ T2 on the 100-item subset)?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{RQ1: The behavioural landscape of 30 small models}
+\label{sec:res-landscape}
+
+\Cref{tab:main-results} gives the primary metric of every behaviour for all
+30 models. \Cref{fig:heatmap} shows the same data as a heatmap of standardised scores.
+
+\input{tables/main_results}
+
+\begin{figure}[htbp]
+\centering
+\figplaceholder{Heatmap: 30 models (rows, ordered by size) $\times$ primary behaviour
+metrics (columns, grouped by cluster), $z$-scored per column, with a diverging colour
+scale where colour means ``worse''. Put the file in \texttt{figures/heatmap.pdf}.}
+\caption{Behaviour profile of the 30 models.}
+\label{fig:heatmap}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\figplaceholder{Small multiples: one panel per behaviour; $x$ = $\log_2$ parameters,
+$y$ = primary metric with 95\% CI; points coloured by family; lines connect models of
+the same family and generation.}
+\caption{Behaviour as a function of model size.}
+\label{fig:size}
+\end{figure}
+
+\begin{observation}[RQ1 --- overall landscape and size effects]
+\questions{
+\item Which behaviours show a clear size trend (report $\rho$ and the $\beta_1$ of \cref{eq:glmm}), and which do not? Is \Hyp{1} supported?
+\item Which models are outliers for their size, in either direction?
+\item Are there ``best-in-class'' models per size bin? Is any model good on all behaviours?
+\item How do small models compare with the frontier numbers reported in the original benchmark papers (with caveats)?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{Cluster A: Agreeableness}
+
+\subsubsection{\Bx{1} Factual sycophancy}
+\input{tables/b1_factual_sycophancy}
+
+\begin{observation}[\Bx{1} factual sycophancy]
+\questions{
+\item How large are regressive flip rates, and how much worse is the authority rebuttal than the simple one?
+\item Do small models flip because they are uncertain (correlate with \Bx{5} confidence), or do confident models flip too?
+\item Do reasoning models (R1-Distill, thinking-on) resist pushback better or worse?
+}
+\TBD
+\end{observation}
+
+\subsubsection{\Bx{2} Social sycophancy}
+\input{tables/b2_social_sycophancy}
+
+\begin{observation}[\Bx{2} social sycophancy]
+\questions{
+\item How do the rates compare with the human baseline? Which face-preserving behaviour dominates?
+\item Is social sycophancy correlated with factual sycophancy (\Bx{1}) across models? This is a direct construct-validity check.
+\item How often do small models fail to give a verdict, and does that differ by family?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{Cluster B: Manipulation and safety}
+
+\subsubsection{\Bx{3} Dark patterns}
+\input{tables/b3_dark_patterns}
+
+\begin{figure}[htbp]
+\centering
+\figplaceholder[0.22\textheight]{Stacked or grouped bar chart: DarkBench occurrence by category, aggregated per size bin (or per family).}
+\caption{Dark-pattern prevalence by category.}
+\label{fig:darkbench}
+\end{figure}
+
+\begin{observation}[\Bx{3} dark patterns]
+\questions{
+\item Which categories are most frequent? Is ``sneaking'' the most common, as reported for frontier models?
+\item Do small models show brand bias towards their own developer?
+\item Is anthropomorphization more common in some families or in community fine-tunes (Hermes~3)?
+}
+\TBD
+\end{observation}
+
+\subsubsection{\Bx{4} Over-refusal and refusal style}
+\input{tables/b4_refusal}
+
+\begin{figure}[htbp]
+\centering
+\figplaceholder[0.25\textheight]{Scatter: $x$ = over-refusal rate on safe prompts, $y$ = compliance rate on unsafe prompts, one point per model, coloured by family. The ideal corner is bottom-left.}
+\caption{The refusal--compliance trade-off across the 30 models.}
+\label{fig:refusal-tradeoff}
+\end{figure}
+
+\begin{observation}[\Bx{4} refusal]
+\questions{
+\item Where do the models lie on the over-refusal vs.\ unsafe-compliance trade-off? Are there models that do well on both?
+\item Which refusal style dominates per family? Do some families lecture more?
+\item How do the community fine-tune (Hermes~3) and the reasoning distill compare with Llama-3.1-8B-Instruct?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{Cluster C: Epistemic conduct}
+
+\subsubsection{\Bx{5} Hedge faithfulness}
+\input{tables/b5_hedging}
+
+\begin{figure}[htbp]
+\centering
+\figplaceholder[0.22\textheight]{Reliability-style plot: $x$ = intrinsic confidence (binned), $y$ = mean decisiveness; one line per size bin; the diagonal means faithful.}
+\caption{Decisiveness vs.\ intrinsic confidence.}
+\label{fig:hedging}
+\end{figure}
+
+\begin{observation}[\Bx{5} hedge faithfulness]
+\questions{
+\item Are small models over-decisive (decisive even when inconsistent)? Does faithfulness improve with size?
+\item Do models hedge at all when asked? What is the hedge rate?
+\item Does cMFG correlate with ECE? Does it correlate with sycophancy (\Bx{1})?
+}
+\TBD
+\end{observation}
+
+\subsubsection{\Bx{6} Clarification-seeking}
+\input{tables/b6_clarification}
+
+\begin{observation}[\Bx{6} clarification]
+\questions{
+\item How often do small models ask, compared with answering directly or giving multiple answers?
+\item Is clarification discriminative (asked more for ambiguous than for clear queries), or indiscriminate?
+\item Which CLAMBER ambiguity types trigger clarification, and which never do?
+}
+\TBD
+\end{observation}
+
+\subsubsection{\Bx{7} Cognitive biases}
+\input{tables/b7_cognitive}
+
+\begin{observation}[\Bx{7} cognitive biases]
+\questions{
+\item Which models are anchored or framed most? Are the effects human-like in direction?
+\item Is there a position preference (\eg for option A), and does it shrink with size?
+\item Is low cognitive bias in some tiny models real, or an artefact of random or invalid answers?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{Cluster D: Explicit vs.\ implicit social bias}
+\input{tables/b8_bias}
+
+\begin{figure}[htbp]
+\centering
+\figplaceholder[0.25\textheight]{Scatter: $x$ = explicit bias (BBQ ambiguous bias score), $y$ = implicit association bias; one point per model; the identity line is shown.}
+\caption{Explicit vs.\ implicit bias per model.}
+\label{fig:bias}
+\end{figure}
+
+\begin{observation}[\Bx{8} explicit vs.\ implicit bias]
+\questions{
+\item Is \Hyp{5} supported, \ie do models with low BBQ bias still show strong implicit associations?
+\item Which BBQ categories and IAT domains show the largest gaps?
+\item Do the ``unknown'' rates differ systematically by family or size?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{\Bx{9} Verbosity and style}
+\input{tables/b9_verbosity}
+
+\begin{observation}[\Bx{9} verbosity]
+\questions{
+\item Which families are most verbose? Does verbosity correlate with judged behaviours (a judge-bias check)?
+\item Do results for \Bx{2}--\Bx{4} change when verbosity is controlled for in \cref{eq:glmm}?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{RQ2: Recipe vs.\ scale}
+\label{sec:res-recipe}
+
+\begin{table}[htbp]
+\centering
+\caption{Variance decomposition: likelihood-ratio tests comparing nested versions of
+\cref{eq:glmm}. Each cell gives $\Delta$deviance (and $p$) when the factor is added.}
+\label{tab:variance}
+\small
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+Factor added & \Bx{1} & \Bx{2} & \Bx{3} & \Bx{4} & \Bx{5} & \Bx{6} & \Bx{7} & \Bx{8} \\
+\midrule
+$\log$ params           & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
++ family                & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
++ model type            & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
++ capability (MMLU)     & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Same-base triplet: three post-training recipes on Llama-3.1-8B. Values are
+primary metrics; $^{*}$ marks a significant McNemar difference from Llama-3.1-8B-Instruct.}
+\label{tab:triplet}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccccccccc@{}}
+\toprule
+Model & MMLU & \Bx{1} & \Bx{2} & \Bx{3} & \Bx{4} & \Bx{5} & \Bx{6} & \Bx{7} & \Bx{8} \\
+\midrule
+Llama-3.1-8B-Instruct       & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+Hermes-3-Llama-3.1-8B       & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+DeepSeek-R1-Distill-Llama-8B& \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Generation pairs at matched size, and thinking on vs.\ off. Cells give
+$\Delta$ = newer (or thinking-on) minus older (or thinking-off). $^{\dagger}$Nearest available size, not exactly matched.}
+\label{tab:generation}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccccccccc@{}}
+\toprule
+Contrast & MMLU & \Bx{1} & \Bx{2} & \Bx{3} & \Bx{4} & \Bx{5} & \Bx{6} & \Bx{7} & \Bx{8} \\
+\midrule
+Qwen2.5-0.5B $\rightarrow$ Qwen3-0.6B & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+Qwen2.5-1.5B $\rightarrow$ Qwen3-1.7B & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+Qwen2.5-7B $\rightarrow$ Qwen3-8B     & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+Gemma-2-2B $\rightarrow$ Gemma-3-4B$^{\dagger}$& \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+Phi-3.5-mini $\rightarrow$ Phi-4-mini & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+Mistral-7B $\rightarrow$ Ministral-8B & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\midrule
+Qwen3-1.7B: think off $\rightarrow$ on & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+SmolLM3-3B: think off $\rightarrow$ on & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+Qwen3-8B: think off $\rightarrow$ on   & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD & \TBD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{observation}[RQ2 --- recipe vs.\ scale]
+\questions{
+\item Does family or post-training explain more variance than size (\cref{tab:variance})? Is \Hyp{2} supported?
+\item How different are the three Llama-3.1-8B variants? On which behaviours does the recipe matter most?
+\item Did newer generations get less sycophantic and less over-refusing, or did they trade one for the other?
+\item What does thinking mode change? Does reasoning reduce or increase sycophancy?
+\item Do fully open models (OLMo~2, SmolLM) differ from closed-data models of similar size?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{RQ3: Effects of quantization}
+\label{sec:res-quant}
+
+\input{tables/quant_aggregate}
+\input{tables/quant_flips}
+
+\begin{figure}[htbp]
+\centering
+\figplaceholder{Dose--response: $x$ = effective bits per weight (log scale), $y$ = paired
+flip rate vs.\ F16; one line per behaviour, with MMLU as a dashed reference; one panel
+per model, or pooled with CIs.}
+\caption{Behaviour drift as a function of effective bits per weight.}
+\label{fig:quant-dose}
+\end{figure}
+
+\begin{observation}[RQ3 --- quantization]
+\questions{
+\item Is Q8\_0 indistinguishable from F16? At which level do aggregate scores first move, and at which level do item flips first exceed MMLU flips?
+\item Do open-ended, judged behaviours (\Bx{2}, \Bx{3}, \Bx{4}) drift more than multiple-choice behaviours (\Bx{1}, \Bx{7}, \Bx{8}) at matched MMLU accuracy (\Hyp{3})?
+\item Is drift directional (\eg more sycophantic, fewer refusals, more decisive) or symmetric noise?
+\item Do flips concentrate on uncertain items, as \citet{hua2026uncertainty} found for bias?
+\item Are small models more fragile to quantization than 8B models (bits $\times$ size interaction)?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{RQ4: Structure across behaviours}
+\label{sec:res-structure}
+
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}[t]{0.48\linewidth}
+\centering
+\figplaceholder[0.22\textheight]{Spearman correlation matrix of primary metrics and MMLU/IFEval across 30 models (clustered).}
+\caption{Correlations.}
+\label{fig:corr}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\linewidth}
+\centering
+\figplaceholder[0.22\textheight]{PCA biplot: models as points (coloured by family), behaviours as loading arrows.}
+\caption{PCA.}
+\label{fig:pca}
+\end{subfigure}
+\caption{Cross-behaviour structure.}
+\label{fig:structure}
+\end{figure}
+
+\begin{observation}[RQ4 --- structure]
+\questions{
+\item Do behaviours cluster as hypothesised in \Hyp{4} (agreeableness vs.\ caution)?
+\item How strongly is each behaviour correlated with MMLU (\Hyp{6})? Does capability predict user-facing behaviour?
+\item Are there clear trade-offs (\eg low over-refusal together with high dark patterns)?
+}
+\TBD
+\end{observation}
+
+% ---------------------------------------------------------------------
+\subsection{Summary of hypotheses}
+\begin{table}[htbp]
+\centering
+\caption{Outcome of the pre-registered hypotheses.}
+\label{tab:hypotheses}
+\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X l@{}}
+\toprule
+Hypothesis & Evidence & Verdict \\
+\midrule
+\Hyp{1} Size effects differ by behaviour & \TBD & \TBD \\
+\Hyp{2} Recipe $>$ size & \TBD & \TBD \\
+\Hyp{3} Quantization drift is hidden and concentrated in open-ended behaviours & \TBD & \TBD \\
+\Hyp{4} Agreeableness and caution clusters & \TBD & \TBD \\
+\Hyp{5} Implicit bias persists despite low explicit bias & \TBD & \TBD \\
+\Hyp{6} Weak link to capability & \TBD & \TBD \\
+\bottomrule
+\end{tabularx}
+\end{table}
